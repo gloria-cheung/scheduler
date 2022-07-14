@@ -2,6 +2,7 @@ import React, {useState} from "react";
 import DayList from "./DayList";
 
 import "components/Application.scss";
+import Appointment from "./Appointment";
 
 // mock data for days until API is set up
 const days = [
@@ -64,7 +65,11 @@ const appointments = {
 
 export default function Application() {
   const [day, setDay] = useState("Monday");
-  
+
+  const appointmentsData = Object.values(appointments).map((app) => {
+    return <Appointment {...app} key={app.id}/>
+  })
+
   return (
     <main className="layout">
       <section className="sidebar">
@@ -88,7 +93,7 @@ export default function Application() {
         />
       </section>
       <section className="schedule">
-        {/* Replace this with the schedule elements durint the "The Scheduler" activity. */}
+        {appointmentsData}
       </section>
     </main>
   );
