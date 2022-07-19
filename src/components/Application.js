@@ -5,24 +5,6 @@ import axios from "axios";
 import "components/Application.scss";
 import Appointment from "./Appointment";
 
-// mock data for days until API is set up
-const days = [
-  {
-    id: 1,
-    name: "Monday",
-    spots: 2,
-  },
-  {
-    id: 2,
-    name: "Tuesday",
-    spots: 5,
-  },
-  {
-    id: 3,
-    name: "Wednesday",
-    spots: 0,
-  },
-];
 // mock data for appointments until API is set up
 const appointments = {
   "1": {
@@ -66,6 +48,14 @@ const appointments = {
 
 export default function Application() {
   const [day, setDay] = useState("Monday");
+  const [days, setDays] = useState([]);
+
+  useEffect(() => {
+    axios.get("/api/days").then((result) => {
+      console.log(result.data)
+      setDays(result.data);
+    })
+  }, []);
 
   const appointmentsData = Object.values(appointments).map((app) => {
     return <Appointment {...app} key={app.id}/>
