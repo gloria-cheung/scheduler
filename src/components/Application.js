@@ -4,7 +4,7 @@ import axios from "axios";
 
 import "components/Application.scss";
 import Appointment from "./Appointment";
-import { getAppointmentsForDay, getInterview } from "helpers/selectors";
+import { getAppointmentsForDay, getInterview, getInterviewersForDay } from "helpers/selectors";
 
 export default function Application() {
   const [state, setState] = useState({
@@ -36,14 +36,16 @@ export default function Application() {
   
   // create array of appointment components to later display in schedule section
   const appointmentsData = dailyAppointments.map((app) => {
-    //using helper func to get interviewer data and save it to interview variable
+    
     const interview = getInterview(state, app.interview);
+    const interviewers = getInterviewersForDay(state, state.day);
 
     return (
       <Appointment 
         {...app} 
         key={app.id} 
         interview={interview}
+        interviewers={interviewers}
       />
     );
   });
