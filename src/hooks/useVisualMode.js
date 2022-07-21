@@ -3,7 +3,7 @@ import { useState } from "react";
 export function useVisualMode(initial) {
   const [mode, setMode] = useState(initial);
   const [history, setHistory] = useState([initial]);
-  // ["FIRST", "SECOND", "THIRD"] ==> ["FIRST", "THIRD"]
+
   const transition = function(newMode, replace = false) {
     if (replace) {
       const newHistory = history.filter(h => h !== mode);
