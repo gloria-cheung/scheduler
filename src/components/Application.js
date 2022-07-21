@@ -33,7 +33,7 @@ export default function Application() {
 
   // using helper func to find appointments for single day
   const dailyAppointments = getAppointmentsForDay(state, state.day);
-  
+
   // create array of appointment components to later display in schedule section
   const appointmentsData = dailyAppointments.map((app) => {
     

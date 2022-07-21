@@ -10,10 +10,12 @@ export function getAppointmentsForDay(state, day) {
 
 export function getInterview(state, interview) {
   // return obj continaing interview data
+  let result = {};
   if (interview) {
     let interviewerId = interview.interviewer;
-    interview.interviewer = state.interviewers[interviewerId];
-    return interview;
+    result.interviewer = state.interviewers[interviewerId];
+    result.student = interview.student;
+    return result;
   }
   return null;
 };
