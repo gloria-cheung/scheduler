@@ -1,5 +1,4 @@
 import React from "react";
-import classNames from "classnames";
 import InterviewListItem from "./InterviewerListItem";
 import "components/InterviewerList.scss";
 
