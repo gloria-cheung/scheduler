@@ -4,47 +4,7 @@ import axios from "axios";
 
 import "components/Application.scss";
 import Appointment from "./Appointment";
-
-// // mock data for appointments until API is set up
-// const appointments = {
-//   "1": {
-//     id: 1,
-//     time: "12pm",
-//   },
-//   "2": {
-//     id: 2,
-//     time: "1pm",
-//     interview: {
-//       student: "Lydia Miller-Jones",
-//       interviewer:{
-//         id: 3,
-//         name: "Sylvia Palmer",
-//         avatar: "https://i.imgur.com/LpaY82x.png",
-//       }
-//     }
-//   },
-//   "3": {
-//     id: 3,
-//     time: "2pm",
-//   },
-//   "4": {
-//     id: 4,
-//     time: "3pm",
-//     interview: {
-//       student: "Archie Andrews",
-//       interviewer:{
-//         id: 4,
-//         name: "Cohana Roy",
-//         avatar: "https://i.imgur.com/FK8V841.jpg",
-//       }
-//     }
-//   },
-//   "5": {
-//     id: 5,
-//     time: "4pm",
-//   }
-// };
-
+import { getAppointmentsForDay } from "helpers/selectors";
 
 export default function Application() {
   const [state, setState] = useState({
@@ -52,17 +12,27 @@ export default function Application() {
     days: [],
     appointments: {}
   })
-  
+
   const setDay = day => setState({...state, day});
-  const setDays = days => setState(prev => ({...prev, days}));
 
   useEffect(() => {
-    axios.get("/api/days").then((result) => {
-      setDays(result.data);
-    })
+    Promise.all([
+      axios.get("/api/days"),
+      axios.get("/api/appointments")
+    ]).then((all) => {
+      setState(prev => ({
+        ...prev, 
+        days: all[0].data, 
+        appointments: all[1].data
+      }));
+    });
   }, []);
 
-  const appointmentsData = Object.values(appointments).map((app) => {
+  // using helper func to find appointments for single day
+  const dailyAppointments = getAppointmentsForDay(state, state.day);
+  
+  // create array of appointment components to later display in schedule section
+  const appointmentsData = dailyAppointments.map((app) => {
     return <Appointment {...app} key={app.id}/>
   })
 
