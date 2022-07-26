@@ -31,22 +31,20 @@ export default function Application() {
     });
   }, []);
 
-  // const findInterviewerObj = function(id) {
-  //   return state.interviewers[id]
-  // }
-
-  const bookInterview = function(id, interview) {
+  const bookInterview = async function(id, interview) {
     const appointment = {
       ...state.appointments[id],
       interview: {...interview}
     };
-
     const appointments = {
       ...state.appointments,
       [id]: appointment
     };
-    
-    setState({...state, appointments});
+
+    await axios.put(`/api/appointments/${id}`, {interview})
+    .then(result => {
+      setState({...state, appointments});
+    })
   };
 
   // using helper func to find appointments for single day
