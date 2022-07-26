@@ -10,8 +10,8 @@ export default function InterviewerList(props) {
       <InterviewListItem 
         key={person.id} 
         {...person} 
-        setInterviewer={()=>onChange(person.id)} 
-        selected={person.id === value}
+        setInterviewer={()=>onChange(person)} 
+        selected={person.name === value}
       />
     )
   })
