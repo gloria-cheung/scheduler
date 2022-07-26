@@ -8,7 +8,7 @@ import { useApplicationData } from "hooks/useApplicationData";
 
 export default function Application() {
   // state loading and actions moved to custom hook
-  const {state, setDay, bookInterview, cancelInterview} = useApplicationData();
+  const {state, setDay, bookInterview, cancelInterview, updateInterview} = useApplicationData();
 
   // using helper func to find appointments for single day
   const dailyAppointments = getAppointmentsForDay(state, state.day);
@@ -27,6 +27,7 @@ export default function Application() {
         interviewers={interviewers}
         bookInterview={bookInterview}
         cancelInterview={cancelInterview}
+        updateInterview={updateInterview}
       />
     );
   });
