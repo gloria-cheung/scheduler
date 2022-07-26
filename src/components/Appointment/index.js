@@ -9,12 +9,13 @@ import Status from "./Status";
 import { useVisualMode } from "hooks/useVisualMode";
 
 export default function Appointment(props) {
-  const {id, time, interview, interviewers, bookInterview} = props;
+  const {id, time, interview, interviewers, bookInterview, cancelInterview} = props;
   
   const EMPTY = "EMPTY";
   const SHOW = "SHOW";
   const CREATE = "CREATE";
   const SAVING = "SAVING";
+  const DELETE = "DELETE";
 
   const {mode, transition, back} = useVisualMode(
     props.interview ? SHOW : EMPTY
@@ -26,26 +27,36 @@ export default function Appointment(props) {
       interviewer
     };
     transition(SAVING);
-    
+
     bookInterview(id, interview)
       .then(result => {
         transition(SHOW);
-      })
+      });
+  };
+
+  const onDelete = function() {
+    transition(DELETE);
+
+    cancelInterview(id)
+      .then(result => {
+        transition(EMPTY);
+      });
   };
 
   return (
     <article className="appointment">
 
-      <Header time={time}/>
+      <Header time={time} />
       {mode === EMPTY && <Empty onAdd={() => transition(CREATE)} />}
-      {mode === SHOW && <Show {...interview} />}
+      {mode === SHOW && <Show {...interview} onDelete={onDelete} />}
       {mode === CREATE && <
         Form 
           interviewers={interviewers} 
           onCancel={() => back(EMPTY)} 
           save={save}
         />}
-      {mode === SAVING && <Status message="saving"/>}
+      {mode === SAVING && <Status message="Saving" />}
+      {mode === DELETE && <Status message ="Deleting" />}
     </article>
   );
 }
