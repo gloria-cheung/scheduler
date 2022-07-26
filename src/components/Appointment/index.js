@@ -11,7 +11,7 @@ import Error from "./Error";
 import { useVisualMode } from "hooks/useVisualMode";
 
 export default function Appointment(props) {
-  const {id, time, interview, interviewers, bookInterview, cancelInterview} = props;
+  const {id, time, interview, interviewers, bookInterview, cancelInterview, updateInterview} = props;
   
   const EMPTY = "EMPTY";
   const SHOW = "SHOW";
@@ -35,6 +35,22 @@ export default function Appointment(props) {
     transition(SAVING);
 
     bookInterview(id, interview)
+      .then(result => {
+        transition(SHOW);
+      })
+      .catch(e => {
+        transition(ERROR_SAVE, true);
+      });
+  };
+
+  const onEdit = function(name, interviewer) {
+    const interview = {
+      student: name,
+      interviewer
+    };
+    transition(SAVING);
+
+    updateInterview(id, interview)
       .then(result => {
         transition(SHOW);
       })
@@ -92,7 +108,7 @@ export default function Appointment(props) {
         Form
           interviewers={interviewers} 
           onCancel={() => back()} 
-          onSave={onSave}
+          onSave={onEdit}
           student={interview.student}
           interviewer={interview.interviewer}
 
