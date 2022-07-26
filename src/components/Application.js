@@ -31,6 +31,24 @@ export default function Application() {
     });
   }, []);
 
+  // const findInterviewerObj = function(id) {
+  //   return state.interviewers[id]
+  // }
+
+  const bookInterview = function(id, interview) {
+    const appointment = {
+      ...state.appointments[id],
+      interview: {...interview}
+    };
+
+    const appointments = {
+      ...state.appointments,
+      [id]: appointment
+    };
+    
+    setState({...state, appointments});
+  };
+
   // using helper func to find appointments for single day
   const dailyAppointments = getAppointmentsForDay(state, state.day);
 
@@ -46,6 +64,7 @@ export default function Application() {
         key={app.id} 
         interview={interview}
         interviewers={interviewers}
+        bookInterview={bookInterview}
       />
     );
   });
