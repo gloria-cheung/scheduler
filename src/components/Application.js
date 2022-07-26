@@ -45,6 +45,10 @@ export default function Application() {
     .then(result => {
       setState({...state, appointments});
     })
+    .catch(e => {
+      console.log(e);
+      throw e;
+    });
   };
 
   const cancelInterview = async function(id) {
@@ -60,6 +64,10 @@ export default function Application() {
       .then(result => {
         setState({...state, appointments});
       })
+      .catch(e => {
+        console.log(e);
+        throw e;
+      });
   };
 
   // using helper func to find appointments for single day
