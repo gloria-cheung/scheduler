@@ -132,7 +132,7 @@ storiesOf("InterviewerList", module)
   .add("Selected", () => (
     <InterviewerList
       interviewers={interviewers}
-      value={3}
+      value={"Mildred Nazir"}
     />
   ))
   .add("Clickable", () => (
@@ -191,7 +191,7 @@ storiesOf("Appointment", module)
     return (
       <Form 
         student="Gloria Cheung"
-        interviewer={1}
+        interviewer={interviewers[0]}
         interviewers={interviewers}
         onSave={action("onSave")}
         onCancel={action("onCancel")}
