@@ -6,7 +6,7 @@ export function useApplicationData() {
     day: "Monday",
     days: [],
     appointments: {},
-    interviewers: {}
+    interviewers: {} 
   })
 
   const setDay = day => setState({...state, day});
@@ -26,7 +26,38 @@ export function useApplicationData() {
     });
   }, []);
 
+  const updatedDays = function(action) {
+    const selectedDay = state.days.find(d => d.name === state.day);
+    const idx = state.days.indexOf(selectedDay);
+    (action === "delete" ? selectedDay.spots = selectedDay.spots + 1 : selectedDay.spots = selectedDay.spots - 1)
+    const days = [...state.days]
+    days.splice(idx, 1, selectedDay)
+    return days;
+  };
+    
   const bookInterview = async function(id, interview) {
+    const appointment = {
+      ...state.appointments[id],
+      interview: {...interview}
+    };
+    const appointments = {
+      ...state.appointments,
+      [id]: appointment
+    };
+
+    const days = updatedDays();
+
+    await axios.put(`/api/appointments/${id}`, {interview})
+    .then(result => {
+      setState({...state, appointments, days});
+    })
+    .catch(e => {
+      console.log(e);
+      throw e;
+    });
+  };
+
+  const updateInterview = async function(id, interview) {
     const appointment = {
       ...state.appointments[id],
       interview: {...interview}
@@ -55,14 +86,17 @@ export function useApplicationData() {
       }
     }
 
+    const days = updatedDays("delete");
+
     await axios.delete(`/api/appointments/${id}`)
       .then(result => {
-        setState({...state, appointments});
+        setState({...state, appointments, days});
       })
       .catch(e => {
         console.log(e);
         throw e;
       });
   };
-  return {state, setDay, bookInterview, cancelInterview};
+
+  return {state, setDay, bookInterview, cancelInterview, updateInterview};
 };
