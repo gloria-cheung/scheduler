@@ -47,6 +47,21 @@ export default function Application() {
     })
   };
 
+  const cancelInterview = async function(id) {
+    const appointments = {
+      ...state.appointments, 
+      [id]: {
+        ...state.appointments[id], 
+        interview: null
+      }
+    }
+
+    await axios.delete(`/api/appointments/${id}`)
+      .then(result => {
+        setState({...state, appointments});
+      })
+  };
+
   // using helper func to find appointments for single day
   const dailyAppointments = getAppointmentsForDay(state, state.day);
 
@@ -63,6 +78,7 @@ export default function Application() {
         interview={interview}
         interviewers={interviewers}
         bookInterview={bookInterview}
+        cancelInterview={cancelInterview}
       />
     );
   });
