@@ -31,14 +31,14 @@ export function useApplicationData() {
     const idx = state.days.indexOf(selectedDay);
     let count = 0;
     for (let id of selectedDay.appointments) {
-      if (appointments[id].interview === null) {
+      if (!appointments[id].interview) {
         count ++;
       }
     }
-    const copyDay ={...selectedDay};
-    copyDay.spots = count; 
-    const days = [...state.days]
-    days.splice(idx, 1, copyDay)
+    const copyofSelectedDay ={...selectedDay};
+    copyofSelectedDay.spots = count; 
+    const days = [...state.days];
+    days.splice(idx, 1, copyofSelectedDay);
     return days;
   };
     
