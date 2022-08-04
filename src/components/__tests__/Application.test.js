@@ -57,5 +57,28 @@ describe("Application", () => {
     const day = getAllByTestId(container, "day").find(day => queryByText(day, "Monday"));
     expect(getByText(day, "2 spots remaining")).toBeInTheDocument();
   });
+
+  it("loads data, edits an interview and keeps the spots remaining for Monday the same", async () => {
+    const { container } = render(<Application />);
+
+    await waitForElement(() => getByText(container, "Archie Cohen"));
+    const appointment = getAllByTestId(container, "appointment").find(
+      appointment => queryByText(appointment, "Archie Cohen")
+    );
+
+    fireEvent.click(queryByAltText(appointment, "Edit"));
+
+    const studentInput = getByPlaceholderText(appointment, "Enter Student Name");
+    fireEvent.change(studentInput, { target: { value: "Gloria Cheung" } });
+
+    fireEvent.click(queryByText(appointment, "Save"));
+
+    await waitForElement(() => getByText(container, "Gloria Cheung"));
+
+    expect(getByText(container, "Gloria Cheung")).toBeInTheDocument();
+
+    const day = getAllByTestId(container, "day").find(day => queryByText(day, "Monday"));
+    expect(getByText(day, "1 spot remaining")).toBeInTheDocument();
+  });
 });
 
