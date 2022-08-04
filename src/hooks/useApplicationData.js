@@ -26,12 +26,19 @@ export function useApplicationData() {
     });
   }, []);
 
-  const updatedDays = function(action) {
+  const updatedDays = function(appointments) {
     const selectedDay = state.days.find(d => d.name === state.day);
     const idx = state.days.indexOf(selectedDay);
-    (action === "delete" ? selectedDay.spots = selectedDay.spots + 1 : selectedDay.spots = selectedDay.spots - 1)
+    let count = 0;
+    for (let id of selectedDay.appointments) {
+      if (appointments[id].interview === null) {
+        count ++;
+      }
+    }
+    const copyDay ={...selectedDay};
+    copyDay.spots = count; 
     const days = [...state.days]
-    days.splice(idx, 1, selectedDay)
+    days.splice(idx, 1, copyDay)
     return days;
   };
     
@@ -45,7 +52,7 @@ export function useApplicationData() {
       [id]: appointment
     };
 
-    const days = updatedDays();
+    const days = updatedDays(appointments);
 
     await axios.put(`/api/appointments/${id}`, {interview})
     .then(result => {
@@ -86,7 +93,7 @@ export function useApplicationData() {
       }
     }
 
-    const days = updatedDays("delete");
+    const days = updatedDays(appointments);
 
     await axios.delete(`/api/appointments/${id}`)
       .then(result => {
