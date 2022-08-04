@@ -29,14 +29,17 @@ export function useApplicationData() {
   const updatedDays = function(appointments) {
     const selectedDay = state.days.find(d => d.name === state.day);
     const idx = state.days.indexOf(selectedDay);
+
     let count = 0;
     for (let id of selectedDay.appointments) {
       if (!appointments[id].interview) {
         count ++;
       }
     }
+
     const copyofSelectedDay ={...selectedDay};
     copyofSelectedDay.spots = count; 
+    
     const days = [...state.days];
     days.splice(idx, 1, copyofSelectedDay);
     return days;
