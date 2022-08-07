@@ -4,6 +4,7 @@ describe("Appointments", () => {
     cy.visit("/");
     cy.contains("[data-testid=day]", "Monday");
   });
+
   it("should book an interview", () => {
     // Clicks on the "Add" button in the second appointment
     cy.get("[alt=Add]").click();
@@ -21,6 +22,7 @@ describe("Appointments", () => {
     cy.contains(".appointment__card--show", "Lydia Miller-Jones");
     cy.contains(".appointment__card--show", "Sylvia Palmer");
   });
+
   it("should edit an interview", () => {
     // Clicks the edit button for the existing appointment
     cy.get("[alt=Edit]").first().click({ force: true });
