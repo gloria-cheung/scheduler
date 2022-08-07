@@ -23,13 +23,23 @@ describe("Appointments", () => {
   });
   it("should edit an interview", () => {
     // Clicks the edit button for the existing appointment
+    cy.get("[alt=Edit]").first().click({ force: true });
+
     // Changes the name and interviewer
+    cy.get("[data-testid=student-name-input]")
+      .clear()
+      .type("Lydia Miller-Jones");
+    cy.get("[alt='Tori Malcolm']").click();
+
     // Clicks the save button
+    cy.contains("Save").click();
+
     // Sees the edit to the appointment
+    cy.contains(".appointment__card--show", "Lydia Miller-Jones");
+    cy.contains(".appointment__card--show", "Tori Malcolm");
   });
 
   it("should cancel an interview", () => {
-    // Visits the root of our web server
     // Clicks the delete button for the existing appointment
     // Clicks the confirm button
     // Sees that the appointment slot is empty
