@@ -6,119 +6,110 @@ export function useApplicationData() {
     day: "Monday",
     days: [],
     appointments: {},
-    interviewers: {} 
-  })
+    interviewers: {},
+  });
 
-  const setDay = day => setState({...state, day});
+  const setDay = (day) => setState({ ...state, day });
 
   useEffect(() => {
     Promise.all([
       axios.get("/api/days"),
       axios.get("/api/appointments"),
-      axios.get("/api/interviewers")
+      axios.get("/api/interviewers"),
     ]).then((all) => {
-      setState(prev => ({
-        ...prev, 
-        days: all[0].data, 
+      setState((prev) => ({
+        ...prev,
+        days: all[0].data,
         appointments: all[1].data,
-        interviewers: all[2].data
+        interviewers: all[2].data,
       }));
     });
   }, []);
 
-  const updatedDays = function(appointments) {
-    const selectedDay = state.days.find(d => d.name === state.day);
+  const updatedDays = function (appointments) {
+    const selectedDay = state.days.find((d) => d.name === state.day);
     const idx = state.days.indexOf(selectedDay);
 
     let count = 0;
     for (let id of selectedDay.appointments) {
       if (!appointments[id].interview) {
-        count ++;
+        count++;
       }
     }
 
-    const copyofSelectedDay ={...selectedDay};
-    copyofSelectedDay.spots = count; 
-    
+    const copyofSelectedDay = { ...selectedDay };
+    copyofSelectedDay.spots = count;
+
     const days = [...state.days];
     days.splice(idx, 1, copyofSelectedDay);
     return days;
   };
-    
-  const bookInterview = async function(id, interview) {
-    try {
-      const appointment = {
-        ...state.appointments[id],
-        interview: {...interview}
-      };
-      const appointments = {
-        ...state.appointments,
-        [id]: appointment
-      };
-  
-      const days = updatedDays(appointments);
-  
-      await axios.put(`/api/appointments/${id}`, {interview})
-      .then(result => {
-        setState({...state, appointments, days});
+
+  const bookInterview = async function (id, interview) {
+    const appointment = {
+      ...state.appointments[id],
+      interview: { ...interview },
+    };
+    const appointments = {
+      ...state.appointments,
+      [id]: appointment,
+    };
+
+    const days = updatedDays(appointments);
+
+    await axios
+      .put(`/api/appointments/${id}`, { interview })
+      .then((result) => {
+        setState({ ...state, appointments, days });
       })
-      .catch(e => {
+      .catch((e) => {
         console.log(e);
         throw e;
       });
-    } catch (error) {
-        console.log(error);
-    }
   };
 
-  const updateInterview = async function(id, interview) {
-    try {
-      const appointment = {
-        ...state.appointments[id],
-        interview: {...interview}
-      };
-      const appointments = {
-        ...state.appointments,
-        [id]: appointment
-      };
-  
-      await axios.put(`/api/appointments/${id}`, {interview})
-      .then(result => {
-        setState({...state, appointments});
+  const updateInterview = async function (id, interview) {
+    const appointment = {
+      ...state.appointments[id],
+      interview: { ...interview },
+    };
+    const appointments = {
+      ...state.appointments,
+      [id]: appointment,
+    };
+
+    await axios
+      .put(`/api/appointments/${id}`, { interview })
+      .then((result) => {
+        setState({ ...state, appointments });
       })
-      .catch(e => {
+      .catch((e) => {
         console.log(e);
         throw e;
       });
-    } catch (error) {
-      console.log(error);
-    }
   };
 
-  const cancelInterview = async function(id) {
-    try {
-      const appointments = {
-        ...state.appointments, 
-        [id]: {
-          ...state.appointments[id], 
-          interview: null
-        }
-      }
-  
-      const days = updatedDays(appointments);
-  
-      await axios.delete(`/api/appointments/${id}`)
-        .then(result => {
-          setState({...state, appointments, days});
-        })
-        .catch(e => {
-          console.log(e);
-          throw e;
-        });
-    } catch (error) {
-      console.log(error);
-    }
+  const cancelInterview = async function (id) {
+    const appointments = {
+      ...state.appointments,
+      [id]: {
+        ...state.appointments[id],
+        interview: null,
+      },
+    };
+
+    const days = updatedDays(appointments);
+
+    await axios
+      .delete(`/api/appointments/${id}`)
+      .then((result) => {
+        setState({ ...state, appointments, days });
+      })
+      .catch((e) => {
+        console.log(e);
+        throw e;
+      });
   };
 
-  return {state, setDay, bookInterview, cancelInterview, updateInterview};
-};
+  return { state, setDay, bookInterview, cancelInterview, updateInterview };
+}
