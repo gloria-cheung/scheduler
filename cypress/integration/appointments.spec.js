@@ -1,12 +1,10 @@
 describe("Appointments", () => {
-  it("should book an interview", () => {
-    // reset db before each time test runs
+  beforeEach(() => {
     cy.request("GET", "/api/debug/reset");
-
     cy.visit("/");
-
     cy.contains("[data-testid=day]", "Monday");
-
+  });
+  it("should book an interview", () => {
     // Clicks on the "Add" button in the second appointment
     cy.get("[alt=Add]").click();
 
@@ -22,5 +20,18 @@ describe("Appointments", () => {
     // Sees the booked appointment
     cy.contains(".appointment__card--show", "Lydia Miller-Jones");
     cy.contains(".appointment__card--show", "Sylvia Palmer");
+  });
+  it("should edit an interview", () => {
+    // Clicks the edit button for the existing appointment
+    // Changes the name and interviewer
+    // Clicks the save button
+    // Sees the edit to the appointment
+  });
+
+  it("should cancel an interview", () => {
+    // Visits the root of our web server
+    // Clicks the delete button for the existing appointment
+    // Clicks the confirm button
+    // Sees that the appointment slot is empty
   });
 });
