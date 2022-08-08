@@ -4,7 +4,17 @@ Interview Scheduler is a simple, SPA that allows users to book an interview with
 
 ## Final Product
 
-!["demo"](./public/scheduler.gif)
+### Demo Video
+
+!["demo video"](./docs/scheduler.gif)
+
+### Create New Appointment
+
+!["create new appointment"](./docs/create_appointment.png)
+
+### Monday fully booked
+
+!["monday full"](./docs/no_spots_left.png)
 
 ## Setup
 
