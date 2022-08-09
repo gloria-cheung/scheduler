@@ -2,7 +2,7 @@
 
 Interview Scheduler is a simple, SPA that allows users to book an interview with LHL mentors that are available for the day.
 
-Deployed [here](https://62f285ea39a8a0127ecc5bd2--effervescent-salmiakki-1283bd.netlify.app/)
+Deployed [here](https://production--schedulerapp-lhl.netlify.app/)
 
 ## Final Product
 
